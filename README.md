@@ -2,7 +2,7 @@
 
 ## 👩 La Quinceañera
 - Información sobre el alias.
-- Tema musical.
+- Tema musical de la preferencia.
 
 
 ## 👨‍👩‍👧 Familia
