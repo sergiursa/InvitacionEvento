@@ -86,7 +86,7 @@
   </section>
 
   <section class="registro">
-    <h2>Confirmar Asistencia antes de 10 de Octubre</h2>
+    <h2>Confirmar Asistencia antes:10 de Octubre</h2>
     <form id="formRegistro">
       <input type="text" id="nombre" placeholder="Tu nombre" required>
       <select id="asistencia">
@@ -106,20 +106,29 @@
   
   <!-- Botón de invitados solo aparece si la clave es correcta -->
   <div id="zonaPrivada" style="display:none;">
-    <button id="verInvitados">Ver Invitados Registrados</button>
-    <button id="verResumen">📊 Ver resumen de asistencia</button>  
+    <div class="consultas-acciones">
+        <button id="verInvitados">📋 Ver invitados y resumen</button>
+    </div>
     <div id="resultado"></div>
   </div>
 </section>
 
   <script src="script.js"></script>
  <footer>
-  © 2026. Todos los derechos reservados 
-  <a href="mailto:saus1@hotmail.com">Diseño y Desarrollo por:saus1@hotmail.com</a>
+  <div class="footer-copy">
+    <span class="footer-year">© 2026</span>
+    <span>Todos los derechos reservados</span>
+  </div>
+  <div class="footer-desarrollo">
+    <img src="codigo.png" alt="Código QR" class="codigo-footer">
+    <div class="footer-credit">
+      <span>Diseño y desarrollo</span>
+      <a href="mailto:saus1@hotmail.com">saus1@hotmail.com</a>
+    </div>
+  </div>
 </footer>
 
   </body>
-</html>
 
 </body>
 </html>

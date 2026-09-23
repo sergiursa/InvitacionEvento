@@ -54,14 +54,6 @@ document.getElementById("formRegistro").addEventListener("submit", async (e) => 
   e.target.reset();
 });
 
-// Consultar invitados
-document.getElementById("verInvitados").addEventListener("click", async () => {
-  const res = await fetch(apiURL);
-  const invitados = await res.json();
-  const lista = invitados.map(i => `${i.nombre} - ${i.asistencia}`).join("<br>");
-  document.getElementById("resultado").innerHTML = lista;
-});
-
 function iniciarCuentaRegresiva(fechaEvento) {
   const countdown = document.getElementById("countdown");
 
@@ -117,7 +109,7 @@ obtenerFechaEvento();
 
 document.getElementById("verInvitados").addEventListener("click", async () => {
   try {
-    const respuesta = await fetch("https://6aa5fac1d7765db98507208b.mockapi.io/invitados");
+    const respuesta = await fetch(apiURL);
     const invitados = await respuesta.json();
 
     // Si el endpoint devuelve un array, asegurate que sea así:
@@ -126,7 +118,8 @@ document.getElementById("verInvitados").addEventListener("click", async () => {
       return;
     }
 
-    // Construcción de la tabla
+    let van = 0;
+    let noVan = 0;
     let tabla = `
       <table>
         <thead>
@@ -139,18 +132,45 @@ document.getElementById("verInvitados").addEventListener("click", async () => {
     `;
 
     invitados.forEach(i => {
+      const asistencia = i.asistencia.toLowerCase();
+      const claseAsistencia = asistencia === "sí" ? "asiste" : "no-asiste";
+
+      if (asistencia === "sí") {
+        van++;
+      } else if (asistencia === "no") {
+        noVan++;
+      }
+
       tabla += `
         <tr>
           <td>${i.nombre}</td>
-          <td>${i.asistencia}</td>
+          <td><span class="estado-asistencia ${claseAsistencia}">${i.asistencia}</span></td>
         </tr>
       `;
     });
 
     tabla += `</tbody></table>`;
 
-    // Reemplaza el contenido anterior por la tabla
-    document.getElementById("resultado").innerHTML = tabla;
+    document.getElementById("resultado").innerHTML = `
+      <div class="resumen-asistencia" aria-label="Resumen de asistencia">
+        <div class="resumen-card asisten">
+          <span class="resumen-icono">✓</span>
+          <span class="resumen-etiqueta">Asisten</span>
+          <strong class="resumen-numero">${van}</strong>
+          <span class="resumen-detalle">invitados confirmados</span>
+        </div>
+        <div class="resumen-card no-asisten">
+          <span class="resumen-icono">×</span>
+          <span class="resumen-etiqueta">No asisten</span>
+          <strong class="resumen-numero">${noVan}</strong>
+          <span class="resumen-detalle">invitados ausentes</span>
+        </div>
+      </div>
+      <div class="detalle-invitados">
+        <h3>Detalle de invitados</h3>
+        ${tabla}
+      </div>
+    `;
 
   } catch (error) {
     console.error("Error al obtener invitados:", error);
@@ -170,34 +190,3 @@ document.getElementById("acceder").addEventListener("click", () => {
   }
 });
 
-document.getElementById("verResumen").addEventListener("click", async () => {
-  try {
-    const respuesta = await fetch(apiURL);
-    const invitados = await respuesta.json();
-
-    if (!Array.isArray(invitados)) {
-      console.error("El endpoint no devolvió un array de invitados");
-      return;
-    }
-
-    // Contadores
-    let van = 0;
-    let noVan = 0;
-
-    invitados.forEach(i => {
-      if (i.asistencia.toLowerCase() === "sí") {
-        van++;
-      } else if (i.asistencia.toLowerCase() === "no") {
-        noVan++;
-      }
-    });
-
-    // Mostrar resultado
-    document.getElementById("resultado").innerHTML = `
-      ✅ Invitados que asisten: <strong>${van}</strong><br>
-      ❌ Invitados que no asisten: <strong>${noVan}</strong>
-    `;
-  } catch (error) {
-    console.error("Error al obtener resumen de asistencia:", error);
-  }
-});
